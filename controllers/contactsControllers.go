@@ -17,7 +17,7 @@ var CreateContact = func(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(contact)
 	if err != nil {
-		u.Respond(w, u.Message(false, "Error while decoding request body"))
+		u.Respond(w, u.Message(false, "Error while decoding request body", 422))
 		return
 	}
 
@@ -32,12 +32,12 @@ var GetContactsFor = func(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(params["id"])
 	if err != nil {
 		//The passed path parameter is not an integer
-		u.Respond(w, u.Message(false, "There was an error in your request"))
+		u.Respond(w, u.Message(false, "There was an error in your request", 500))
 		return
 	}
 
 	data := models.GetContacts(uint(id))
-	resp := u.Message(true, "success")
+	resp := u.Message(true, "success", 200)
 	resp["data"] = data
 	u.Respond(w, resp)
 }
