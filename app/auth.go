@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"jwt-auth-api/models"
+	u "jwt-auth-api/utils"
 
 	jwt "github.com/dgrijalva/jwt-go"
 
-	"jwt-auth-api/models"
-	u "jwt-auth-api/utils"
 )
 
 var JwtAuthentication = func(next http.Handler) http.Handler {
@@ -33,7 +33,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		tokenHeader := r.Header.Get("Authorization") //Grab the token from the header
 
 		if tokenHeader == "" { //Token is missing, returns with error code 403 Unauthorized
-			response = u.Message(false, "Missing auth token")
+			response = u.Message(false, "Missing auth token",401)
 			w.WriteHeader(http.StatusForbidden)
 			w.Header().Add("Content-Type", "application/json")
 			u.Respond(w, response)
